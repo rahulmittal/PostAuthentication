@@ -1,0 +1,119 @@
+{
+  "EDITOR_STATE": {
+    "allProjectFiles": {
+      "6eff5f4e-1ee7-464e-b355-c0bd55a166dd": {
+        "id": "6eff5f4e-1ee7-464e-b355-c0bd55a166dd",
+        "parent": null,
+        "name": "PostAuthentication",
+        "type": "DIRECTORY",
+        "isDirectory": true,
+        "children": [
+          "68217f8a-f342-4675-8e6d-93e510790b9f"
+        ],
+        "isRemovable": false,
+        "filePath": "PostAuthentication"
+      },
+      "68217f8a-f342-4675-8e6d-93e510790b9f": {
+        "id": "68217f8a-f342-4675-8e6d-93e510790b9f",
+        "parent": "6eff5f4e-1ee7-464e-b355-c0bd55a166dd",
+        "name": "lambda.js",
+        "type": "JS_LAMBDA",
+        "isDirectory": false,
+        "children": [],
+        "isRemovable": true,
+        "filePath": "PostAuthentication/lambda.js",
+        "code": "let AWS = require('aws-sdk');\nconst ddb = new AWS.DynamoDB.DocumentClient();\n\nexports.handler = function (event, context, callback) {\n    // Send post authentication data to Cloudwatch logs\n    console.log(\"POST AUTH trigger - Authentication successful\");\n    console.log(\"Trigger function =\", event.triggerSource);\n    console.log(\"User pool = \", event.userPoolId);\n    console.log(\"App client ID = \", event.callerContext.clientId);\n    console.log(\"User ID = \", event.userName);\n\n    console.log(\" fetching data from DB\");\n    ddb.get({\n        TableName: 'CognitoUser',\n        Key: { 'userId': 'rahulmittal' }\n    }).promise()\n        .then((data) => {\n            console.log('data :' + JSON.stringify(data));\n        })\n        .catch((err) => {\n             console.log(\"ERROR : \" + JSON.stringify(err));\n        });\n\n\n    // Return to Amazon Cognito\n    callback(null, event);\n}",
+        "config": {
+          "runtime": "nodejs8.10",
+          "handler": "handler",
+          "timeout": 60,
+          "memory": 128,
+          "layers": []
+        },
+        "triggers": []
+      }
+    },
+    "deletedFiles": [],
+    "rootNode": "6eff5f4e-1ee7-464e-b355-c0bd55a166dd",
+    "openFiles": [
+      "68217f8a-f342-4675-8e6d-93e510790b9f"
+    ],
+    "currentFileId": "68217f8a-f342-4675-8e6d-93e510790b9f",
+    "resources": {
+      "ddbCognitoUser": {
+        "name": "ddbCognitoUser",
+        "type": "DynamoDB",
+        "config": {
+          "mode": 1,
+          "operation": "get",
+          "table": {
+            "arn": "arn:aws:dynamodb:us-east-1:060098525355:table/CognitoUser",
+            "name": "CognitoUser",
+            "partitionKey": "userId",
+            "partitionKeyType": "S",
+            "hasSortKey": false,
+            "sortKey": "",
+            "sortKeyType": "S",
+            "payPerRequest": true,
+            "mode": 1
+          },
+          "isGlobalEditMode": false,
+          "parameters": {
+            "Key": {
+              "userId": "userId"
+            },
+            "Item": {},
+            "ExpressionAttributeValues": {}
+          },
+          "triggerParams": {},
+          "validator": {
+            "validatableFields": {},
+            "validity": true
+          },
+          "valid": true
+        }
+      }
+    },
+    "customTemplate": {
+      "dialect": null,
+      "definitions": {}
+    },
+    "envVariables": [
+      {
+        "lambdaId": "all",
+        "varKey": "SIGMA_AWS_ACC_ID",
+        "varValue": null,
+        "shouldPersist": false,
+        "displayOnly": false,
+        "editable": false
+      }
+    ],
+    "packageJSON": {
+      "dependencies": {
+        "aws-sdk": {
+          "name": "aws-sdk",
+          "language": "javascript",
+          "version": "2.176.0",
+          "dev": true,
+          "notRemovable": false
+        }
+      }
+    }
+  },
+  "PROJECT_META": {
+    "projectName": "PostAuthentication",
+    "projectDescription": "Post Authentication trigger for cognito",
+    "projectVersion": "1.0.0",
+    "projectRegion": "us-east-1",
+    "platform": "AWS",
+    "platformRegions": {},
+    "lastSave": 1563648883679
+  },
+  "VCS_STATE": {
+    "provider": "GitHub",
+    "repo": {
+      "name": "PostAuthentication",
+      "url": "https://github.com/rahulmittal/PostAuthentication"
+    }
+  }
+}
