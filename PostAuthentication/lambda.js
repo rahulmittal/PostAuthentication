@@ -3,7 +3,7 @@ const ddb = new AWS.DynamoDB.DocumentClient();
 
 exports.handler = function (event, context, callback) {
     // Send post authentication data to Cloudwatch logs
-    console.log("POST AUTH trigger - Authentication successful");
+    console.log("POST AUTH trigger - Authentication successful - event :" + JSON.stringify(event));
     console.log("Trigger function =", event.triggerSource);
     console.log("User pool = ", event.userPoolId);
     console.log("App client ID = ", event.callerContext.clientId);

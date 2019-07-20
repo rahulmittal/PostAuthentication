@@ -22,7 +22,7 @@
         "children": [],
         "isRemovable": true,
         "filePath": "PostAuthentication/lambda.js",
-        "code": "let AWS = require('aws-sdk');\nconst ddb = new AWS.DynamoDB.DocumentClient();\n\nexports.handler = function (event, context, callback) {\n    // Send post authentication data to Cloudwatch logs\n    console.log(\"POST AUTH trigger - Authentication successful\");\n    console.log(\"Trigger function =\", event.triggerSource);\n    console.log(\"User pool = \", event.userPoolId);\n    console.log(\"App client ID = \", event.callerContext.clientId);\n    console.log(\"User ID = \", event.userName);\n\n    console.log(\" fetching data from DB\");\n    ddb.get({\n        TableName: 'CognitoUser',\n        Key: { 'userId': 'rahulmittal' }\n    }).promise()\n        .then((data) => {\n            console.log('data :' + JSON.stringify(data));\n        })\n        .catch((err) => {\n             console.log(\"ERROR : \" + JSON.stringify(err));\n        });\n\n\n    // Return to Amazon Cognito\n    callback(null, event);\n}",
+        "code": "let AWS = require('aws-sdk');\nconst ddb = new AWS.DynamoDB.DocumentClient();\n\nexports.handler = function (event, context, callback) {\n    // Send post authentication data to Cloudwatch logs\n    console.log(\"POST AUTH trigger - Authentication successful - event :\" + JSON.stringify(event));\n    console.log(\"Trigger function =\", event.triggerSource);\n    console.log(\"User pool = \", event.userPoolId);\n    console.log(\"App client ID = \", event.callerContext.clientId);\n    console.log(\"User ID = \", event.userName);\n\n    console.log(\" fetching data from DB\");\n    ddb.get({\n        TableName: 'CognitoUser',\n        Key: { 'userId': 'rahulmittal' }\n    }).promise()\n        .then((data) => {\n            console.log('data :' + JSON.stringify(data));\n        })\n        .catch((err) => {\n             console.log(\"ERROR : \" + JSON.stringify(err));\n        });\n\n\n    // Return to Amazon Cognito\n    callback(null, event);\n}",
         "config": {
           "runtime": "nodejs8.10",
           "handler": "handler",
@@ -107,7 +107,7 @@
     "projectRegion": "us-east-1",
     "platform": "AWS",
     "platformRegions": {},
-    "lastSave": 1563648883679
+    "lastSave": 1563649222882
   },
   "VCS_STATE": {
     "provider": "GitHub",
