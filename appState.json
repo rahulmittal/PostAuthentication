@@ -22,7 +22,7 @@
         "children": [],
         "isRemovable": true,
         "filePath": "PostAuthentication/lambda.js",
-        "code": "let AWS = require('aws-sdk');\nconst ddb = new AWS.DynamoDB.DocumentClient();\n\nexports.handler = function (event, context, callback) {\n    // Send post authentication data to Cloudwatch logs\n    console.log(\"POST AUTH trigger - Authentication successful - event :\" + JSON.stringify(event));\n    if (event.request.userAttributes.sub) {\n        var user = event.request.userAttributes.sub;\n        console.log(\"put data for user\" + user);\n        ddb.put({\n            TableName: 'CognitoUser',\n            Item: {\n                'loginCount': 0,\n                'userId': user\n            }\n        }).promise().then((data) => {\n            console.log('PUT data :' + JSON.stringify(data));\n\t\t\tconsole.log(\"calling context done! - success\");\n\t\t\tcontext.done(null, event);\t            \n        }).catch((err) => {\n            console.log(\"ERROR while put: \" + JSON.stringify(err));\n\t\t\tconsole.log(\"calling context done! - error\");\n\t\t\tcontext.done(JSON.stringify(err));            \n        });\n    }else{\n        console.error(\"USer Not found for event : \" + JSON.stringify(event));\n        callback(null, event);\n\n    }\n}",
+        "code": "let AWS = require('aws-sdk');\nconst ddb = new AWS.DynamoDB.DocumentClient();\n\nexports.handler = function (event, context, callback) {\n    // Send post authentication data to Cloudwatch logs\n    console.log(\"POST AUTH trigger - Authentication successful - event :\" + JSON.stringify(event));\n    if (event.request.userAttributes.sub) {\n        var user = event.request.userAttributes.sub;\n        console.log(\"put data for user\" + user);\n        ddb.put({\n            TableName: 'CognitoUser',\n            Item: {\n                'loginCount': 0,\n                'userId': user\n            }\n        }).promise().then((data) => {\n            console.log('PUT data :' + JSON.stringify(data));\n\t\t\tconsole.log(\"calling context done! - success\");\n\t\t\tcontext.done(null, event);\t            \n        }).catch((err) => {\n            console.log(\"ERROR while put: \" + JSON.stringify(err));\n\t\t\tconsole.log(\"calling context done! - error\");\n\t\t\tcontext.done(JSON.stringify(err));            \n        });\n    }else{\n        console.error(\"USer Not found for event : \" + JSON.stringify(event));\n        callback(null, event);\n    }\n}",
         "config": {
           "runtime": "nodejs8.10",
           "handler": "handler",
@@ -107,7 +107,7 @@
     "projectRegion": "us-east-1",
     "platform": "AWS",
     "platformRegions": {},
-    "lastSave": 1563781329709
+    "lastSave": 1563781406630
   },
   "VCS_STATE": {
     "provider": "GitHub",

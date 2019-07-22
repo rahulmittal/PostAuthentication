@@ -25,6 +25,5 @@ exports.handler = function (event, context, callback) {
     }else{
         console.error("USer Not found for event : " + JSON.stringify(event));
         callback(null, event);
-
     }
 }
