@@ -4,24 +4,27 @@ const ddb = new AWS.DynamoDB.DocumentClient();
 exports.handler = function (event, context, callback) {
     // Send post authentication data to Cloudwatch logs
     console.log("POST AUTH trigger - Authentication successful - event :" + JSON.stringify(event));
-    console.log("Trigger function =", event.triggerSource);
-    console.log("User pool = ", event.userPoolId);
-    console.log("App client ID = ", event.callerContext.clientId);
-    console.log("User ID = ", event.userName);
-
-    console.log(" fetching data from DB");
-    ddb.get({
-        TableName: 'CognitoUser',
-        Key: { 'userId': 'rahulmittal' }
-    }).promise()
-        .then((data) => {
-            console.log('data :' + JSON.stringify(data));
-        })
-        .catch((err) => {
-             console.log("ERROR : " + JSON.stringify(err));
+    if (event.request.userAttributes.sub) {
+        var user = event.request.userAttributes.sub;
+        console.log("put data for user" + user);
+        ddb.put({
+            TableName: 'CognitoUser',
+            Item: {
+                'loginCount': 0,
+                'userId': user
+            }
+        }).promise().then((data) => {
+            console.log('PUT data :' + JSON.stringify(data));
+			console.log("calling context done! - success");
+			context.done(null, event);	            
+        }).catch((err) => {
+            console.log("ERROR while put: " + JSON.stringify(err));
+			console.log("calling context done! - error");
+			context.done(JSON.stringify(err));            
         });
+    }else{
+        console.error("USer Not found for event : " + JSON.stringify(event));
+        callback(null, event);
 
-
-    // Return to Amazon Cognito
-    callback(null, event);
+    }
 }
